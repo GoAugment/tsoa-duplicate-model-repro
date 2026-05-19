@@ -1,0 +1,9 @@
+{
+  "controllerPathGlobs": [
+    "src/controllers/clientDeclarationDuplicateController.ts"
+  ],
+  "spec": {
+    "outputDirectory": "generated/client-declaration",
+    "specVersion": 3
+  }
+}

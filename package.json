@@ -1,0 +1,30 @@
+{
+  "name": "tsoa-duplicate-model-repro",
+  "version": "0.0.0",
+  "description": "Standalone TSOA repro project for duplicate model definition failures in metadata generation, covering @tsoaModel canonical selection, duplicate logical files reached through different paths, and source contracts colliding with built client declaration models.",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22 <23",
+    "pnpm": ">=10 <11"
+  },
+  "scripts": {
+    "build": "tsc --declaration --emitDeclarationOnly --target ES2022 --module CommonJS --moduleResolution Node --strict --skipLibCheck --rootDir client/src --outDir client/dist client/src/api.ts",
+    "clean": "rm -rf client/dist generated node_modules"
+  },
+  "dependencies": {
+    "@tsoa/runtime": "7.0.0-alpha.0"
+  },
+  "devDependencies": {
+    "@tsoa/cli": "7.0.0-alpha.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "tsoa",
+    "repro",
+    "duplicate-model",
+    "metadata-generation",
+    "CheckModelUnicity"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "controllerPathGlobs": ["src/controllers/pathIdentity*Controller.ts"],
+  "spec": {
+    "outputDirectory": "generated/path-identity",
+    "specVersion": 3
+  }
+}

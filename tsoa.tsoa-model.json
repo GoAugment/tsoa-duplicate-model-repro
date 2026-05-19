@@ -1,0 +1,7 @@
+{
+  "controllerPathGlobs": ["src/controllers/tsoaModelDuplicateController.ts"],
+  "spec": {
+    "outputDirectory": "generated/tsoa-model",
+    "specVersion": 3
+  }
+}
