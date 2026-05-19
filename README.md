@@ -97,7 +97,7 @@ Install those packed PR packages into this repro:
 
 ```sh
 cd /path/to/tsoa-duplicate-model-repro
-yarn clean
+rm -rf client/dist generated node_modules
 yarn install --immutable
 yarn add -D @tsoa/cli@file:/tmp/tsoa-pr-packages/tsoa-cli.tgz
 yarn add @tsoa/runtime@file:/tmp/tsoa-pr-packages/tsoa-runtime.tgz
