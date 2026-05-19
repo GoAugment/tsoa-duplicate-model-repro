@@ -4,10 +4,10 @@
   "description": "Standalone TSOA repro project for duplicate model definition failures in metadata generation, covering @tsoaModel canonical selection, duplicate logical files reached through different paths, and source contracts colliding with built client declaration models.",
   "license": "MIT",
   "private": true,
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "yarn@4.14.1",
   "engines": {
     "node": ">=22 <23",
-    "pnpm": ">=10 <11"
+    "yarn": ">=4 <5"
   },
   "scripts": {
     "build": "tsc --declaration --emitDeclarationOnly --target ES2022 --module CommonJS --moduleResolution Node --strict --skipLibCheck --rootDir client/src --outDir client/dist client/src/api.ts",

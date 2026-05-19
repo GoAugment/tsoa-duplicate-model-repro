@@ -4,7 +4,7 @@ This repository contains minimal fixtures for TSOA duplicate model definition fa
 
 It intentionally does not use any private application code. The fixtures cover:
 
-- A pnpm/workspace-style path duplication where the same logical file is reached through two filesystem paths.
+- A workspace/symlink-style path duplication where the same logical file is reached through two filesystem paths.
 - A built client package `.d.ts` type and a source contract type that describe the same schema but produce the same model name.
 - An `@tsoaModel` canonical declaration that should win when another declaration with the same model name is present.
 
@@ -24,29 +24,31 @@ Source: <https://github.com/lukeautry/tsoa/blob/master/docs/CONTRIBUTING.md>
 
 ## Install
 
-Use Node 22 and pnpm 10:
+Use Node 22 and Yarn 4:
 
 ```sh
 corepack enable
-pnpm --version
 node --version
+yarn --version
 ```
 
+This repository pins `yarn@4.14.1` and uses Yarn's `node-modules` linker.
+
 ```sh
-pnpm install
-pnpm build
+yarn install
+yarn build
 ```
 
 The default `package.json` uses `@tsoa/cli@7.0.0-alpha.0` and `@tsoa/runtime@7.0.0-alpha.0`.
-`pnpm build` regenerates the client package declaration file consumed by the TSOA controller.
+`yarn build` regenerates the client package declaration file consumed by the TSOA controller.
 
 ## Reproduce stock failures
 
 Run TSOA's built-in `spec` command against the default config:
 
 ```sh
-pnpm build
-pnpm exec tsoa spec
+yarn build
+yarn tsoa spec
 ```
 
 With stock `@tsoa/cli@7.0.0-alpha.0`, generation fails with a duplicate model definition error.
@@ -54,23 +56,27 @@ With stock `@tsoa/cli@7.0.0-alpha.0`, generation fails with a duplicate model de
 To isolate each fixture, run the same TSOA command with a narrower config:
 
 ```sh
-pnpm build
-pnpm exec tsoa spec --configuration tsoa.path-identity.json
-pnpm exec tsoa spec --configuration tsoa.client-declaration.json
-pnpm exec tsoa spec --configuration tsoa.tsoa-model.json
+yarn build
+yarn tsoa spec --configuration tsoa.path-identity.json
+yarn tsoa spec --configuration tsoa.client-declaration.json
+yarn tsoa spec --configuration tsoa.tsoa-model.json
 ```
 
-Expected stock failures:
+Expected stock failure examples:
 
-- `SharedPrompt`: same logical source file reached through `original.ts` and a symlinked `injected.ts`.
-- `WorkflowMode`: source contract type collides with a built client package `.d.ts` type.
-- `ULID`: duplicate declarations where one declaration is marked with `@tsoaModel`.
+The model names below are generic fixtures in this repository, not special TSOA model names and not the only names that can fail.
+
+- `SharedPrompt`: an example where the same logical source file is reached through `original.ts` and a symlinked `injected.ts`.
+- `WorkflowMode`: an example where a source contract type collides with a built client package `.d.ts` type.
+- `ULID`: an example where duplicate declarations exist and one declaration is marked with `@tsoaModel`.
 
 Relationship to upstream issues:
 
 - [#1650](https://github.com/lukeautry/tsoa/issues/1650): covered by the `ULID` fixture. That issue is specifically about `@tsoaModel` no longer selecting the intended canonical declaration when two declarations share the same model name.
 - [#1853](https://github.com/lukeautry/tsoa/issues/1853): covered by the `SharedPrompt` fixture. That issue is specifically about `CheckModelUnicity` comparing raw filesystem paths when the same logical file is reachable through different pnpm workspace paths.
 - The `WorkflowMode` fixture is additional coverage for the same `CheckModelUnicity` failure area. It is not the exact scenario from #1650 or #1853; it covers an equivalent source contract model colliding with a built client package declaration model.
+
+The `SharedPrompt` fixture uses a symlink rather than pnpm's `injectWorkspacePackages` behavior. It is intended to demonstrate the same path-identity failure class while keeping this repository aligned with TSOA's Yarn-based issue template.
 
 ## Verify a TSOA PR build
 
@@ -91,12 +97,12 @@ Install those packed PR packages into this repro:
 
 ```sh
 cd /path/to/tsoa-duplicate-model-repro
-pnpm clean
-pnpm install --frozen-lockfile
-pnpm add -D @tsoa/cli@file:/tmp/tsoa-pr-packages/tsoa-cli.tgz
-pnpm add @tsoa/runtime@file:/tmp/tsoa-pr-packages/tsoa-runtime.tgz
-pnpm build
-pnpm exec tsoa spec
+yarn clean
+yarn install --immutable
+yarn add -D @tsoa/cli@file:/tmp/tsoa-pr-packages/tsoa-cli.tgz
+yarn add @tsoa/runtime@file:/tmp/tsoa-pr-packages/tsoa-runtime.tgz
+yarn build
+yarn tsoa spec
 ```
 
 With the fixed TSOA build, generation should complete and write `generated/swagger.json`.
